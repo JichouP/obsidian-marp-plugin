@@ -11,16 +11,16 @@ import {
 
 // Remember to rename these classes and interfaces!
 
-interface MyPluginSettings {
-  mySetting: string;
+interface ObsidianMarpPluginSettings {
+  setting: string;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
-  mySetting: 'default',
+const DEFAULT_SETTINGS: ObsidianMarpPluginSettings = {
+  setting: 'default',
 };
 
 export default class MyPlugin extends Plugin {
-  settings: MyPluginSettings;
+  settings: ObsidianMarpPluginSettings;
 
   async onload() {
     await this.loadSettings();
@@ -46,7 +46,7 @@ export default class MyPlugin extends Plugin {
       id: 'open-sample-modal-simple',
       name: 'Open sample modal (simple)',
       callback: () => {
-        new SampleModal(this.app).open();
+        new MarpModal(this.app).open();
       },
     });
     // This adds an editor command that can perform some operation on the current editor instance
@@ -70,7 +70,7 @@ export default class MyPlugin extends Plugin {
           // If checking is true, we're simply "checking" if the command can be run.
           // If checking is false, then we want to actually perform the operation.
           if (!checking) {
-            new SampleModal(this.app).open();
+            new MarpModal(this.app).open();
           }
 
           // This command will only show up in Command Palette when the check function returns true
@@ -80,7 +80,7 @@ export default class MyPlugin extends Plugin {
     });
 
     // This adds a settings tab so the user can configure various aspects of the plugin
-    this.addSettingTab(new SampleSettingTab(this.app, this));
+    this.addSettingTab(new MarpSettingTab(this.app, this));
 
     // If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
     // Using this function will automatically remove the event listener when this plugin is disabled.
@@ -105,7 +105,7 @@ export default class MyPlugin extends Plugin {
   }
 }
 
-class SampleModal extends Modal {
+class MarpModal extends Modal {
   constructor(app: App) {
     super(app);
   }
@@ -121,7 +121,7 @@ class SampleModal extends Modal {
   }
 }
 
-class SampleSettingTab extends PluginSettingTab {
+class MarpSettingTab extends PluginSettingTab {
   plugin: MyPlugin;
 
   constructor(app: App, plugin: MyPlugin) {
@@ -142,10 +142,10 @@ class SampleSettingTab extends PluginSettingTab {
       .addText(text =>
         text
           .setPlaceholder('Enter your secret')
-          .setValue(this.plugin.settings.mySetting)
+          .setValue(this.plugin.settings.setting)
           .onChange(async value => {
             console.log('Secret: ' + value);
-            this.plugin.settings.mySetting = value;
+            this.plugin.settings.setting = value;
             await this.plugin.saveSettings();
           }),
       );
