@@ -1,14 +1,17 @@
 import { ItemView, TFile, WorkspaceLeaf } from 'obsidian';
 import { fileState } from './fileState';
 import { marp } from './marp';
+import { MarpPluginSettings } from './settings';
 
 export const MARP_PREVIEW_VIEW_TYPE = 'marp-preview-view';
 
 export class PreviewView extends ItemView {
   file: TFile;
-  constructor(leaf: WorkspaceLeaf) {
+  settings: MarpPluginSettings;
+  constructor(leaf: WorkspaceLeaf, settings: MarpPluginSettings) {
     super(leaf);
     this.file = leaf.getViewState().state.file;
+    this.settings = settings;
   }
 
   getViewType(): string {
@@ -36,6 +39,7 @@ export class PreviewView extends ItemView {
   }
 
   onChange() {
+    if (!this.settings.autoReload) return;
     this.onOpen();
   }
 }

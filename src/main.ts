@@ -1,10 +1,11 @@
 import { Notice, Plugin, TAbstractFile } from 'obsidian';
 import { fileState } from './fileState';
-import { DEFAULT_SETTINGS, ObsidianMarpPluginSettings } from './marpSettings';
+import { DEFAULT_SETTINGS, MarpPluginSettings } from './settings';
 import { MARP_PREVIEW_VIEW_TYPE, PreviewView } from './preview';
+import { MarpSettingTab } from './settingTab';
 
 export default class MarpPlugin extends Plugin {
-  settings: ObsidianMarpPluginSettings;
+  settings: MarpPluginSettings;
   async onload() {
     await this.loadSettings();
     this.addRibbonIcon('presentation', 'Marp', _ => {
@@ -29,8 +30,12 @@ export default class MarpPlugin extends Plugin {
         that.activateView();
       },
     });
-    this.registerView(MARP_PREVIEW_VIEW_TYPE, leaf => new PreviewView(leaf));
+    this.registerView(
+      MARP_PREVIEW_VIEW_TYPE,
+      leaf => new PreviewView(leaf, this.settings),
+    );
     this.registerEvent(this.app.vault.on('modify', this.onChange.bind(this)));
+    this.addSettingTab(new MarpSettingTab(this.app, this));
   }
 
   async onunload() {
