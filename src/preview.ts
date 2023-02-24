@@ -1,11 +1,14 @@
-import { Marp } from '@marp-team/marp-core';
-import { ItemView, WorkspaceLeaf } from 'obsidian';
+import { ItemView, TFile, WorkspaceLeaf } from 'obsidian';
+import { fileState } from './fileState';
+import { marp } from './marp';
 
 export const MARP_PREVIEW_VIEW_TYPE = 'marp-preview-view';
 
 export class PreviewView extends ItemView {
+  file: TFile;
   constructor(leaf: WorkspaceLeaf) {
     super(leaf);
+    this.file = leaf.getViewState().state.file;
   }
 
   getViewType(): string {
@@ -17,21 +20,22 @@ export class PreviewView extends ItemView {
   }
 
   async onOpen() {
-    const marp = new Marp();
-    const { html, css } = marp.render(`# Hello, marp-core!
----
-## test1
----
-## test2`);
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
+    const file = fileState.getFile();
+    if (!file) return;
+    const content = await this.app.vault.cachedRead(file);
+    const { html, css } = marp.render(content);
+    const doc = new DOMParser().parseFromString(html, 'text/html');
     const container = this.containerEl.children[1];
     container.empty();
-    container.appendChild(doc.children[0].children[1].children[0]);
+    container.appendChild(doc.body.children[0]);
     container.createEl('style', { text: css });
   }
 
   async onClose() {
     // Nothing to clean up.
+  }
+
+  onChange() {
+    this.onOpen();
   }
 }
