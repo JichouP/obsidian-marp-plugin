@@ -14,6 +14,7 @@ import { marp } from './marp';
 
 export default class MarpPlugin extends Plugin {
   settings: MarpPluginSettings;
+
   async onload() {
     await this.loadSettings();
     this.addRibbonIcon('presentation', 'Marp: Open Preview', _ => {
@@ -30,7 +31,7 @@ export default class MarpPlugin extends Plugin {
     const that = this;
     this.addCommand({
       id: 'marp-open-preview',
-      name: 'Marp: Open Preview',
+      name: 'Open Preview',
       editorCallback(_editor, ctx) {
         const file = ctx.file;
         if (!file) return;
