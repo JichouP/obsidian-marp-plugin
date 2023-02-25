@@ -2,14 +2,6 @@
 
 Plugin for using [Marp](https://marp.app/) on [Obsidian.md](https://obsidian.md/).
 
-- Preview
-  - Auto reload
-- Export
-  - PDF
-  - HTML
-  - PPTX
-- Custom theme
-
 ## Open the Preview
 
 Select the tab for the Markdown file, then click the button on the ribbon or run `Marp: Open Preview` from the command palette to see a preview.
