@@ -16,7 +16,7 @@ export default class MarpPlugin extends Plugin {
   settings: MarpPluginSettings;
   async onload() {
     await this.loadSettings();
-    this.addRibbonIcon('presentation', 'Marp', _ => {
+    this.addRibbonIcon('presentation', 'Marp: Open Preview', _ => {
       const file = this.app.workspace.activeEditor?.file;
       if (!file)
         return new Notice(
