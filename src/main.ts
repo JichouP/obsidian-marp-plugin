@@ -6,7 +6,7 @@ import {
   TAbstractFile,
 } from 'obsidian';
 import { fileState } from './fileState';
-import { DEFAULT_SETTINGS, MarpPluginSettings } from './settings';
+import { MARP_DEFAULT_SETTINGS, MarpPluginSettings } from './settings';
 import { MARP_PREVIEW_VIEW_TYPE, PreviewView } from './preview';
 import { MarpSettingTab } from './settingTab';
 import { readdir, readFile } from 'fs/promises';
@@ -95,7 +95,7 @@ export default class MarpPlugin extends Plugin {
   }
 
   async loadSettings() {
-    this.settings = { ...DEFAULT_SETTINGS, ...(await this.loadData()) };
+    this.settings = { ...MARP_DEFAULT_SETTINGS, ...(await this.loadData()) };
   }
 
   async saveSettings() {

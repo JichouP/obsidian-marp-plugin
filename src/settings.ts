@@ -4,7 +4,7 @@ export interface MarpPluginSettings {
   themeDir: string;
 }
 
-export const DEFAULT_SETTINGS: MarpPluginSettings = {
+export const MARP_DEFAULT_SETTINGS: MarpPluginSettings = {
   autoReload: true,
   createNewSplitTab: true,
   themeDir: '',
