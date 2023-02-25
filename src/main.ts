@@ -1,8 +1,16 @@
-import { Notice, Plugin, TAbstractFile } from 'obsidian';
+import {
+  FileSystemAdapter,
+  normalizePath,
+  Notice,
+  Plugin,
+  TAbstractFile,
+} from 'obsidian';
 import { fileState } from './fileState';
 import { DEFAULT_SETTINGS, MarpPluginSettings } from './settings';
 import { MARP_PREVIEW_VIEW_TYPE, PreviewView } from './preview';
 import { MarpSettingTab } from './settingTab';
+import { readdir, readFile } from 'fs/promises';
+import { marp } from './marp';
 
 export default class MarpPlugin extends Plugin {
   settings: MarpPluginSettings;
@@ -36,6 +44,31 @@ export default class MarpPlugin extends Plugin {
     );
     this.registerEvent(this.app.vault.on('modify', this.onChange.bind(this)));
     this.addSettingTab(new MarpSettingTab(this.app, this));
+
+    // load marp themes
+    {
+      const basePath = (
+        this.app.vault.adapter as FileSystemAdapter
+      ).getBasePath();
+      const { themeDir } = this.settings;
+      const isCss = (filename: string) => filename.split('.').at(-1) === 'css';
+
+      if (themeDir) {
+        const themePaths = (
+          await readdir(normalizePath(`${basePath}/${themeDir}`), {
+            withFileTypes: true,
+          })
+        )
+          .filter(f => f.isFile() && isCss(f.name))
+          .map(v => normalizePath(`${basePath}/${themeDir}/${v.name}`));
+
+        const cssContents = await Promise.all(
+          themePaths.map(path => readFile(path, { encoding: 'utf-8' })),
+        );
+
+        cssContents.forEach(css => marp.themeSet.add(css));
+      }
+    }
   }
 
   async onunload() {

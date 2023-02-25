@@ -41,5 +41,20 @@ export class MarpSettingTab extends PluginSettingTab {
             await this.plugin.saveSettings();
           }),
       );
+
+    new Setting(containerEl)
+      .setName('Theme Folder Location')
+      .setDesc(
+        'Specify the relative path of the directory where the theme is saved. By saving the css files in the specified directory, Marp can use a custom theme.',
+      )
+      .addText(text =>
+        text
+          .setPlaceholder('MarpTheme')
+          .setValue(this.plugin.settings.themeDir)
+          .onChange(async v => {
+            this.plugin.settings.themeDir = v;
+            await this.plugin.saveSettings();
+          }),
+      );
   }
 }
