@@ -30,7 +30,7 @@ export default class MarpPlugin extends Plugin {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     this.addCommand({
-      id: 'marp-open-preview',
+      id: 'open-preview',
       name: 'Open Preview',
       editorCallback(_editor, ctx) {
         const file = ctx.file;
