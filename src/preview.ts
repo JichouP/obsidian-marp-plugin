@@ -39,6 +39,7 @@ export class PreviewView extends ItemView {
   }
 
   async onOpen() {
+    this.registerEvent(this.app.vault.on('modify', this.onChange.bind(this)));
     const basePath = (
       this.app.vault.adapter as FileSystemAdapter
     ).getBasePath();

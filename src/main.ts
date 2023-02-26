@@ -1,10 +1,4 @@
-import {
-  FileSystemAdapter,
-  normalizePath,
-  Notice,
-  Plugin,
-  TAbstractFile,
-} from 'obsidian';
+import { FileSystemAdapter, normalizePath, Notice, Plugin } from 'obsidian';
 import { fileState } from './fileState';
 import { MARP_DEFAULT_SETTINGS, MarpPluginSettings } from './settings';
 import { MARP_PREVIEW_VIEW_TYPE, PreviewView } from './preview';
@@ -43,7 +37,6 @@ export default class MarpPlugin extends Plugin {
       MARP_PREVIEW_VIEW_TYPE,
       leaf => new PreviewView(leaf, this.settings),
     );
-    this.registerEvent(this.app.vault.on('modify', this.onChange.bind(this)));
     this.addSettingTab(new MarpSettingTab(this.app, this));
 
     // load marp themes
@@ -100,30 +93,5 @@ export default class MarpPlugin extends Plugin {
 
   async saveSettings() {
     await this.saveData(this.settings);
-  }
-
-  onChange(file: TAbstractFile) {
-    if (!this.settings.autoReload) {
-      return;
-    }
-
-    const previewView = this.getPreviewView();
-
-    if (!previewView) {
-      return;
-    }
-
-    if (file === this.app.workspace.getActiveFile()) {
-      previewView.onChange();
-    }
-  }
-
-  getPreviewView(): PreviewView | null {
-    const leaf = this.app.workspace
-      .getLeavesOfType(MARP_PREVIEW_VIEW_TYPE)
-      .filter(v => v.view instanceof PreviewView)[0];
-
-    if (!leaf) return null;
-    return leaf.view as PreviewView;
   }
 }
