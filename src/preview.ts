@@ -2,19 +2,26 @@ import {
   FileSystemAdapter,
   ItemView,
   normalizePath,
+  TFile,
+  ViewStateResult,
   WorkspaceLeaf,
 } from 'obsidian';
 import { exportSlide } from './export';
-import { fileState } from './fileState';
 import { marp } from './marp';
 import { MarpPluginSettings } from './settings';
 
 export const MARP_PREVIEW_VIEW_TYPE = 'marp-preview-view';
 
-export class PreviewView extends ItemView {
+interface PreviewViewState {
+  file: TFile | null;
+}
+
+export class PreviewView extends ItemView implements PreviewViewState {
+  file: TFile | null;
   settings: MarpPluginSettings;
   constructor(leaf: WorkspaceLeaf, settings: MarpPluginSettings) {
     super(leaf);
+    this.file = null;
     this.settings = settings;
   }
 
@@ -27,9 +34,8 @@ export class PreviewView extends ItemView {
   }
 
   async renderPreview() {
-    const file = fileState.getFile();
-    if (!file) return;
-    const content = await this.app.vault.cachedRead(file);
+    if (!this.file) return;
+    const content = await this.app.vault.cachedRead(this.file);
     const { html, css } = marp.render(content);
     const doc = new DOMParser().parseFromString(html, 'text/html');
     const container = this.containerEl.children[1];
@@ -38,23 +44,31 @@ export class PreviewView extends ItemView {
     container.createEl('style', { text: css });
   }
 
-  async onOpen() {
-    this.registerEvent(this.app.vault.on('modify', this.onChange.bind(this)));
+  addActions() {
     const basePath = (
       this.app.vault.adapter as FileSystemAdapter
     ).getBasePath();
     const themeDir = normalizePath(`${basePath}/${this.settings.themeDir}`);
-
     this.addAction('download', 'Export as PDF', () => {
-      exportSlide('pdf', basePath, themeDir);
+      if (this.file) {
+        exportSlide(this.file, 'pdf', basePath, themeDir);
+      }
     });
     this.addAction('image', 'Export as PPTX', () => {
-      exportSlide('pptx', basePath, themeDir);
+      if (this.file) {
+        exportSlide(this.file, 'pptx', basePath, themeDir);
+      }
     });
     this.addAction('code-glyph', 'Export as HTML', () => {
-      exportSlide('html', basePath, themeDir);
+      if (this.file) {
+        exportSlide(this.file, 'html', basePath, themeDir);
+      }
     });
-    await this.renderPreview();
+  }
+
+  async onOpen() {
+    this.registerEvent(this.app.vault.on('modify', this.onChange.bind(this)));
+    this.addActions();
   }
 
   async onClose() {
@@ -64,5 +78,19 @@ export class PreviewView extends ItemView {
   onChange() {
     if (!this.settings.autoReload) return;
     this.renderPreview();
+  }
+
+  async setState(state: PreviewViewState, result: ViewStateResult) {
+    if (state.file) {
+      this.file = state.file;
+    }
+    await this.renderPreview();
+    return super.setState(state, result);
+  }
+
+  getState(): PreviewViewState {
+    return {
+      file: this.file,
+    };
   }
 }

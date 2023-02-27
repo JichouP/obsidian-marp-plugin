@@ -1,5 +1,10 @@
-import { FileSystemAdapter, normalizePath, Notice, Plugin } from 'obsidian';
-import { fileState } from './fileState';
+import {
+  FileSystemAdapter,
+  normalizePath,
+  Notice,
+  Plugin,
+  TFile,
+} from 'obsidian';
 import { MARP_DEFAULT_SETTINGS, MarpPluginSettings } from './settings';
 import { MARP_PREVIEW_VIEW_TYPE, PreviewView } from './preview';
 import { MarpSettingTab } from './settingTab';
@@ -11,26 +16,24 @@ export default class MarpPlugin extends Plugin {
 
   async onload() {
     await this.loadSettings();
-    this.addRibbonIcon('presentation', 'Marp: Open Preview', _ => {
+    this.addRibbonIcon('presentation', 'Marp: Open Preview', async _ => {
       const file = this.app.workspace.activeEditor?.file;
       if (!file)
         return new Notice(
           'Please select the tab for the file you want to view in Marp , and then click this button again.',
           10000,
         );
-      fileState.setFile(file);
-      this.activateView();
+      await this.activateView(file);
     });
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     this.addCommand({
       id: 'open-preview',
       name: 'Open Preview',
-      editorCallback(_editor, ctx) {
+      async editorCallback(_editor, ctx) {
         const file = ctx.file;
         if (!file) return;
-        fileState.setFile(file);
-        that.activateView();
+        await that.activateView(file);
       },
     });
     this.registerView(
@@ -69,21 +72,25 @@ export default class MarpPlugin extends Plugin {
     this.app.workspace.detachLeavesOfType(MARP_PREVIEW_VIEW_TYPE);
   }
 
-  async activateView() {
+  async activateView(file: TFile) {
     this.app.workspace.detachLeavesOfType(MARP_PREVIEW_VIEW_TYPE);
 
     if (this.settings.createNewSplitTab) {
       // create a preview on a new split tab
-      this.app.workspace.getLeaf('split').setViewState({
+      const leaf = this.app.workspace.getLeaf('split');
+      await leaf.setViewState({
         type: MARP_PREVIEW_VIEW_TYPE,
         active: true,
       });
+      await (leaf.view as PreviewView).setState({ file }, {});
     } else {
       // do not create new split tab, just a new tab
-      this.app.workspace.getLeaf('tab').setViewState({
+      const leaf = this.app.workspace.getLeaf('tab');
+      await leaf.setViewState({
         type: MARP_PREVIEW_VIEW_TYPE,
         active: true,
       });
+      await (leaf.view as PreviewView).setState({ file }, {});
     }
   }
 
