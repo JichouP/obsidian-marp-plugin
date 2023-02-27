@@ -81,16 +81,16 @@ export default class MarpPlugin extends Plugin {
       await leaf.setViewState({
         type: MARP_PREVIEW_VIEW_TYPE,
         active: true,
+        state: { file },
       });
-      await (leaf.view as PreviewView).setState({ file }, {});
     } else {
       // do not create new split tab, just a new tab
       const leaf = this.app.workspace.getLeaf('tab');
       await leaf.setViewState({
         type: MARP_PREVIEW_VIEW_TYPE,
         active: true,
+        state: { file },
       });
-      await (leaf.view as PreviewView).setState({ file }, {});
     }
   }
 
