@@ -1,6 +1,6 @@
 import { exec } from 'child_process';
 import { readFile, rm, writeFile } from 'fs/promises';
-import { normalizePath, Notice, TFile } from 'obsidian';
+import { Notice, TFile } from 'obsidian';
 import MarkdownIt from 'markdown-it';
 import { embedImageToHtml } from './convertImage';
 import markdownItFrontMatter from 'markdown-it-front-matter';
@@ -8,6 +8,7 @@ import { unified } from 'unified';
 import rehypeParse from 'rehype-parse/lib';
 import rehypeRemark from 'rehype-remark';
 import remarkStringify from 'remark-stringify';
+import { normalize } from 'path';
 
 export async function exportSlide(
   file: TFile,
@@ -15,9 +16,11 @@ export async function exportSlide(
   basePath: string,
   themeDir: string,
 ) {
-  const exportDir = normalizePath(`${process.env.USERPROFILE}/Downloads`);
+  const exportDir = `${
+    process.env[process.platform == 'win32' ? 'USERPROFILE' : 'HOME']
+  }/Downloads`;
   if (!file) return;
-  const filePath = normalizePath(`${basePath}/${file.path}`);
+  const filePath = normalize(`${basePath}/${file.path}`);
   const tmpPath = `${exportDir}/${file.basename}.tmp`;
 
   let frontMatter;
@@ -39,7 +42,11 @@ export async function exportSlide(
 
   reverseConverted = `---\n${frontMatter}\n---\n${reverseConverted}`;
 
-  await writeFile(tmpPath, reverseConverted);
+  try {
+    await writeFile(tmpPath, reverseConverted);
+  } catch (e) {
+    console.error(e);
+  }
 
   const cmd = `npx -y @marp-team/marp-cli@latest --stdin false --allow-local-files --theme-set "${themeDir}" -o "${exportDir}/${file.basename}.${ext}" -- "${tmpPath}"`;
 
