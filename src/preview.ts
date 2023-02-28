@@ -6,6 +6,7 @@ import {
   ViewStateResult,
   WorkspaceLeaf,
 } from 'obsidian';
+import { convertHtml } from './convertImage';
 import { exportSlide } from './export';
 import { marp } from './marp';
 import { MarpPluginSettings } from './settings';
@@ -37,7 +38,7 @@ export class PreviewView extends ItemView implements PreviewViewState {
     if (!this.file) return;
     const content = await this.app.vault.cachedRead(this.file);
     const { html, css } = marp.render(content);
-    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const doc = await convertHtml(html);
     const container = this.containerEl.children[1];
     container.empty();
     container.appendChild(doc.body.children[0]);
