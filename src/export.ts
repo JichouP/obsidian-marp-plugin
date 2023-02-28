@@ -30,7 +30,7 @@ export async function exportSlide(
   });
 
   const result = md.render(await readFile(filePath, 'utf-8'));
-  const embedded = await embedImageToHtml(result);
+  const embedded = await embedImageToHtml(decode(result));
 
   let reverseConverted = (
     await unified()
@@ -55,4 +55,12 @@ export async function exportSlide(
     new Notice('Exported successfully', 20000);
     rm(tmpPath);
   });
+}
+
+function decode(str: string) {
+  const txt = document.createElement('textarea');
+
+  txt.innerHTML = str;
+
+  return txt.value;
 }
