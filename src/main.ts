@@ -1,15 +1,10 @@
-import {
-  FileSystemAdapter,
-  normalizePath,
-  Notice,
-  Plugin,
-  TFile,
-} from 'obsidian';
+import { FileSystemAdapter, Notice, Plugin, TFile } from 'obsidian';
 import { MARP_DEFAULT_SETTINGS, MarpPluginSettings } from './settings';
 import { MARP_PREVIEW_VIEW_TYPE, PreviewView } from './preview';
 import { MarpSettingTab } from './settingTab';
 import { readdir, readFile } from 'fs/promises';
 import { marp } from './marp';
+import { normalize } from 'path';
 
 export default class MarpPlugin extends Plugin {
   settings: MarpPluginSettings;
@@ -52,12 +47,12 @@ export default class MarpPlugin extends Plugin {
 
       if (themeDir) {
         const themePaths = (
-          await readdir(normalizePath(`${basePath}/${themeDir}`), {
+          await readdir(normalize(`${basePath}/${themeDir}`), {
             withFileTypes: true,
           })
         )
           .filter(f => f.isFile() && isCss(f.name))
-          .map(v => normalizePath(`${basePath}/${themeDir}/${v.name}`));
+          .map(v => normalize(`${basePath}/${themeDir}/${v.name}`));
 
         const cssContents = await Promise.all(
           themePaths.map(path => readFile(path, { encoding: 'utf-8' })),

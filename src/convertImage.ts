@@ -1,5 +1,7 @@
 import { access, readFile } from 'fs/promises';
-import { FileSystemAdapter, normalizePath } from 'obsidian';
+import { FileSystemAdapter } from 'obsidian';
+import { normalize } from 'path';
+
 import mimes from 'mime/lite';
 
 const prefix = 'app://local';
@@ -24,7 +26,7 @@ async function convertPathToLocalLink(path: string): Promise<string | null> {
 
   try {
     await access(path);
-    return `${prefix}/${normalizePath(path)}`;
+    return `${prefix}/${normalize(path)}`;
   } catch (e) {
     return null;
   }
@@ -35,19 +37,19 @@ async function convertToBase64(path: string): Promise<string | null> {
     const basePath = (
       this.app.vault.adapter as FileSystemAdapter
     ).getBasePath();
-    return readFileAsBase64(normalizePath(`${basePath}/${path}`));
+    return readFileAsBase64(normalize(`${basePath}/${path}`));
   }
 
   try {
     await access(path);
-    return readFileAsBase64(normalizePath(path));
+    return readFileAsBase64(normalize(path));
   } catch (e) {
     try {
       if (path.startsWith(prefix)) {
         // remove `app://local`
         const newPath = path.slice(prefix.length);
         await access(newPath);
-        return readFileAsBase64(normalizePath(newPath));
+        return readFileAsBase64(normalize(newPath));
       }
     } catch (e) {
       return null;

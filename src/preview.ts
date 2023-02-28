@@ -1,7 +1,6 @@
 import {
   FileSystemAdapter,
   ItemView,
-  normalizePath,
   TFile,
   ViewStateResult,
   WorkspaceLeaf,
@@ -10,6 +9,7 @@ import { convertHtml } from './convertImage';
 import { exportSlide } from './export';
 import { marp } from './marp';
 import { MarpPluginSettings } from './settings';
+import { normalize } from 'path';
 
 export const MARP_PREVIEW_VIEW_TYPE = 'marp-preview-view';
 
@@ -49,7 +49,7 @@ export class PreviewView extends ItemView implements PreviewViewState {
     const basePath = (
       this.app.vault.adapter as FileSystemAdapter
     ).getBasePath();
-    const themeDir = normalizePath(`${basePath}/${this.settings.themeDir}`);
+    const themeDir = normalize(`${basePath}/${this.settings.themeDir}`);
     this.addAction('download', 'Export as PDF', () => {
       if (this.file) {
         exportSlide(this.file, 'pdf', basePath, themeDir);
