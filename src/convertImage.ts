@@ -83,7 +83,26 @@ export async function convertHtml(html: string): Promise<Document> {
     if (!src) continue;
     const link = await convertPathToLocalLink(decodeURI(src));
     if (!link) continue;
-    el.setAttribute('src', link);
+    el.setAttribute('src', link.replace(/\\/g, '/'));
+  }
+  const figures = doc.getElementsByTagName('figure');
+  const reg = /background-image:url\("([^)]+)"\)/;
+  for (let i = 0; i < figures.length; i++) {
+    const el = figures[i];
+    const style = el.getAttribute('style');
+    if (!style || !style.contains('background-image:url')) continue;
+    const decoded = decodeURI(style);
+    const result = decoded.match(reg);
+    const matched = result?.at(1);
+    if (!matched) continue;
+    const converted = await convertPathToLocalLink(matched);
+    if (!converted) continue;
+    const replaced = result?.[0]
+      .replace(matched, converted)
+      .replace(/\\/g, '/');
+    console.log(replaced);
+    if (!replaced) continue;
+    el.setAttribute('style', replaced);
   }
   return doc;
 }
