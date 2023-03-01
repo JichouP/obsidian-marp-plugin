@@ -76,16 +76,14 @@ export async function embedImageToHtml(html: string): Promise<Document> {
     const el = figures[i];
     const style = el.getAttribute('style');
     if (!style || !style.contains('background-image:url')) continue;
-    const decoded = decodeURI(style);
-    const result = decoded.match(reg);
+    const result = style.match(reg);
     const matched = result?.at(1);
     if (!matched) continue;
-    const converted = await convertToBase64(matched);
+    const converted = await convertToBase64(decodeURI(matched));
     if (!converted) continue;
-    const replaced = result?.[0]
-      .replace(matched, converted)
+    const replaced = result?.input
+      ?.replace(matched, converted)
       .replace(/\\/g, '/');
-    console.log(replaced);
     if (!replaced) continue;
     el.setAttribute('style', replaced);
   }
@@ -110,16 +108,14 @@ export async function convertHtml(html: string): Promise<Document> {
     const el = figures[i];
     const style = el.getAttribute('style');
     if (!style || !style.contains('background-image:url')) continue;
-    const decoded = decodeURI(style);
-    const result = decoded.match(reg);
+    const result = style.match(reg);
     const matched = result?.at(1);
     if (!matched) continue;
-    const converted = await convertPathToLocalLink(matched);
+    const converted = await convertPathToLocalLink(decodeURI(matched));
     if (!converted) continue;
-    const replaced = result?.[0]
-      .replace(matched, converted)
+    const replaced = result?.input
+      ?.replace(matched, converted)
       .replace(/\\/g, '/');
-    console.log(replaced);
     if (!replaced) continue;
     el.setAttribute('style', replaced);
   }
