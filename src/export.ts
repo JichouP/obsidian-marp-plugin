@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import { readFile, rm, writeFile } from 'fs/promises';
+import { mkdir, readFile, rm, writeFile } from 'fs/promises';
 import { Notice, TFile } from 'obsidian';
 import MarkdownIt from 'markdown-it';
 import { embedImageToHtml } from './convertImage';
@@ -42,6 +42,7 @@ export async function exportSlide(
 
   reverseConverted = `---\n${frontMatter}\n---\n${reverseConverted}`;
 
+  await mkdir(exportDir, { recursive: true });
   try {
     await writeFile(tmpPath, reverseConverted);
   } catch (e) {
