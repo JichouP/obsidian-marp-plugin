@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import { mkdir, readFile, rm, writeFile } from 'fs/promises';
+import { access, mkdir, readFile, rm, writeFile } from 'fs/promises';
 import { Notice, TFile } from 'obsidian';
 import MarkdownIt from 'markdown-it';
 import { embedImageToHtml } from './convertImage';
@@ -49,7 +49,13 @@ export async function exportSlide(
     console.error(e);
   }
 
-  const cmd = `npx -y @marp-team/marp-cli@latest --stdin false --allow-local-files --theme-set "${themeDir}" -o "${exportDir}/${file.basename}.${ext}" -- "${tmpPath}"`;
+  let cmd: string;
+  try {
+    await access(themeDir);
+    cmd = `npx -y @marp-team/marp-cli@latest --stdin false --allow-local-files --theme-set "${themeDir}" -o "${exportDir}/${file.basename}.${ext}" -- "${tmpPath}"`;
+  } catch (e) {
+    cmd = `npx -y @marp-team/marp-cli@latest --stdin false --allow-local-files -o "${exportDir}/${file.basename}.${ext}" -- "${tmpPath}"`;
+  }
 
   new Notice(`Exporting "${file.basename}.${ext}" to "${exportDir}"`, 20000);
   exec(cmd, () => {
