@@ -1,6 +1,6 @@
 # Obsidian Marp Plugin
 
-Plugin for using [Marp](https://marp.app/) on [Obsidian.md](https://obsidian.md/).
+Plugin to use [Marp](https://marp.app/) with [Obsidian.md](https://obsidian.md/).
 
 ## Open the Preview
 
@@ -14,11 +14,17 @@ Select the tab for the Markdown file, then click the button on the ribbon or run
 
 ## Export Slides
 
-**You need to install Node.js to export slides, because this plugin uses the `npx` command to export slides.**
-You can choose your preferred format from PDF, PPTX, and HTML.  
-**Output is always to the `Downloads` directory.**
+**You need to have Node.js installed to export slides, as this plugin uses the `npx` command to export slides.**  
+You can choose your preferred format from PDF, PPTX and HTML.  
+**The output is always to the `Downloads` directory.**
 
 ![export](docs/export.gif)
+
+## Embed Images
+
+When exporting, images are converted to Base64 and embedded in the file, so you can share slides with embedded local images.  
+The image path can be an absolute or relative path from the root of the vault.  
+The Wikilink format (`![[path/to/image.png]]`) will **NOT** work for slides, **you must use the CommomMark format (`![alt](path/to/image.png)`)**.
 
 ## Settings
 
@@ -27,20 +33,21 @@ You can choose your preferred format from PDF, PPTX, and HTML.
 type: toggle  
 default: on
 
-If on, the preview is automatically updated when the Markdown file is saved.
+If on, the preview will be updated automatically when the Markdown file is saved.
 
 ### Enable Open Preview in Split Tab
 
 type: toggle  
 default: on
 
-Enables the ability to open previews in split tabs. When turned off, a new tab is created in the same split as the markdown file.
+Enables the ability to open previews in split tabs. If disabled, a new tab will be created in the same split as the markdown file.
 
 ### Theme Folder Location
 
 type: text
+default: `MarpTheme`
 
-Specify the relative path of the directory where the theme is saved. By saving the css files in the specified directory, Marp can use a custom theme.
+Specify the relative path to the directory where the theme is stored. By saving the css files in the specified directory, Marp can use a custom theme.
 
 **\*Obsidian must be restarted after adding css.**
 
