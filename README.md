@@ -14,6 +14,7 @@ Select the tab for the Markdown file, then click the button on the ribbon or run
 
 ## Export Slides
 
+**You need to install Node.js to export slides, because this plugin uses the `npx` command to export slides.**
 You can choose your preferred format from PDF, PPTX, and HTML.  
 **Output is always to the `Downloads` directory.**
 
