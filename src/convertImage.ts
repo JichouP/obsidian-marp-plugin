@@ -1,6 +1,6 @@
 import { access, readFile } from 'fs/promises';
 import { FileSystemAdapter } from 'obsidian';
-import { normalize } from 'path';
+import { join, normalize } from 'path';
 
 import mimes from 'mime/lite';
 
@@ -37,7 +37,7 @@ async function convertToBase64(path: string): Promise<string | null> {
     const basePath = (
       this.app.vault.adapter as FileSystemAdapter
     ).getBasePath();
-    return readFileAsBase64(normalize(`${basePath}/${path}`));
+    return readFileAsBase64(normalize(join(basePath, path)));
   }
 
   try {
