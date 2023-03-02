@@ -4,8 +4,8 @@ import { MARP_PREVIEW_VIEW_TYPE, PreviewView } from './preview';
 import { MarpSettingTab } from './settingTab';
 import { readdir, readFile } from 'fs/promises';
 import { marp } from './marp';
-import { normalize } from 'path';
 import { existsSync } from 'fs';
+import { join, normalize } from 'path';
 
 export default class MarpPlugin extends Plugin {
   settings: MarpPluginSettings;
@@ -46,14 +46,14 @@ export default class MarpPlugin extends Plugin {
       const { themeDir } = this.settings;
       const isCss = (filename: string) => filename.split('.').at(-1) === 'css';
 
-      if (themeDir && existsSync(`${basePath}/${themeDir}`)) {
+      if (themeDir && existsSync(join(basePath, themeDir))) {
         const themePaths = (
-          await readdir(normalize(`${basePath}/${themeDir}`), {
+          await readdir(normalize(join(basePath, themeDir)), {
             withFileTypes: true,
           })
         )
           .filter(f => f.isFile() && isCss(f.name))
-          .map(v => normalize(`${basePath}/${themeDir}/${v.name}`));
+          .map(v => normalize(join(basePath, themeDir, v.name)));
 
         const cssContents = await Promise.all(
           themePaths.map(path => readFile(path, { encoding: 'utf-8' })),

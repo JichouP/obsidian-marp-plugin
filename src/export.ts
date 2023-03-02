@@ -8,7 +8,7 @@ import { unified } from 'unified';
 import rehypeParse from 'rehype-parse/lib';
 import rehypeRemark from 'rehype-remark';
 import remarkStringify from 'remark-stringify';
-import { normalize } from 'path';
+import { join, normalize } from 'path';
 
 export async function exportSlide(
   file: TFile,
@@ -16,12 +16,14 @@ export async function exportSlide(
   basePath: string,
   themeDir: string,
 ) {
-  const exportDir = `${
-    process.env[process.platform == 'win32' ? 'USERPROFILE' : 'HOME']
-  }/Downloads`;
+  const exportDir = join(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    process.env[process.platform == 'win32' ? 'USERPROFILE' : 'HOME']!,
+    'Downloads',
+  );
   if (!file) return;
-  const filePath = normalize(`${basePath}/${file.path}`);
-  const tmpPath = `${exportDir}/${file.basename}.tmp`;
+  const filePath = normalize(join(basePath, file.path));
+  const tmpPath = join(exportDir, `${file.basename}.tmp`);
 
   let frontMatter;
 
@@ -55,9 +57,15 @@ export async function exportSlide(
   let cmd: string;
   try {
     await access(themeDir);
-    cmd = `npx -y @marp-team/marp-cli@latest --stdin false --allow-local-files --theme-set "${themeDir}" -o "${exportDir}/${file.basename}.${ext}" -- "${tmpPath}"`;
+    cmd = `npx -y @marp-team/marp-cli@latest --stdin false --allow-local-files --theme-set "${themeDir}" -o "${join(
+      exportDir,
+      file.basename,
+    )}.${ext}" -- "${tmpPath}"`;
   } catch (e) {
-    cmd = `npx -y @marp-team/marp-cli@latest --stdin false --allow-local-files -o "${exportDir}/${file.basename}.${ext}" -- "${tmpPath}"`;
+    cmd = `npx -y @marp-team/marp-cli@latest --stdin false --allow-local-files -o "${join(
+      exportDir,
+      file.basename,
+    )}.${ext}" -- "${tmpPath}"`;
   }
 
   new Notice(`Exporting "${file.basename}.${ext}" to "${exportDir}"`, 20000);
