@@ -16,6 +16,7 @@ export async function exportSlide(
   ext: 'html' | 'pdf' | 'pptx',
   basePath: string,
   themeDir: string,
+  fragmentedList: boolean,
 ) {
   const exportDir = join(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -42,7 +43,7 @@ export async function exportSlide(
     await unified()
       .use(rehypeParse)
       .use(rehypeRemark)
-      .use(remarkStringify)
+      .use(remarkStringify, { bullet: fragmentedList ? '*' : '-' })
       .process(embedded.body.innerHTML)
   ).value;
 
