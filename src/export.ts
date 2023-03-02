@@ -57,12 +57,12 @@ export async function exportSlide(
   let cmd: string;
   try {
     await access(themeDir);
-    cmd = `npx -y @marp-team/marp-cli@latest --stdin false --allow-local-files --theme-set "${themeDir}" -o "${join(
+    cmd = `npx -y @marp-team/marp-cli@latest --bespoke.transition --stdin false --allow-local-files --theme-set "${themeDir}" -o "${join(
       exportDir,
       file.basename,
     )}.${ext}" -- "${tmpPath}"`;
   } catch (e) {
-    cmd = `npx -y @marp-team/marp-cli@latest --stdin false --allow-local-files -o "${join(
+    cmd = `npx -y @marp-team/marp-cli@latest --stdin false --allow-local-files --bespoke.transition -o "${join(
       exportDir,
       file.basename,
     )}.${ext}" -- "${tmpPath}"`;
