@@ -5,6 +5,7 @@ import { MarpSettingTab } from './settingTab';
 import { readdir, readFile } from 'fs/promises';
 import { marp } from './marp';
 import { normalize } from 'path';
+import { existsSync } from 'fs';
 
 export default class MarpPlugin extends Plugin {
   settings: MarpPluginSettings;
@@ -45,7 +46,7 @@ export default class MarpPlugin extends Plugin {
       const { themeDir } = this.settings;
       const isCss = (filename: string) => filename.split('.').at(-1) === 'css';
 
-      if (themeDir) {
+      if (themeDir && existsSync(`${basePath}/${themeDir}`)) {
         const themePaths = (
           await readdir(normalize(`${basePath}/${themeDir}`), {
             withFileTypes: true,
