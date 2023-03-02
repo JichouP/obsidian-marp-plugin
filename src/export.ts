@@ -25,9 +25,12 @@ export async function exportSlide(
 
   let frontMatter;
 
-  const md = new MarkdownIt().use(markdownItFrontMatter, v => {
-    frontMatter = v;
-  });
+  const md = new MarkdownIt('commonmark', { breaks: true }).use(
+    markdownItFrontMatter,
+    v => {
+      frontMatter = v;
+    },
+  );
 
   const result = md.render(await readFile(filePath, 'utf-8'));
   const embedded = await embedImageToHtml(decode(result));
