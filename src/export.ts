@@ -9,6 +9,7 @@ import rehypeParse from 'rehype-parse/lib';
 import rehypeRemark from 'rehype-remark';
 import remarkStringify from 'remark-stringify';
 import { join, normalize } from 'path';
+import fixPath from 'fix-path';
 
 export async function exportSlide(
   file: TFile,
@@ -68,6 +69,7 @@ export async function exportSlide(
     )}.${ext}" -- "${tmpPath}"`;
   }
 
+  fixPath();
   new Notice(`Exporting "${file.basename}.${ext}" to "${exportDir}"`, 20000);
   exec(cmd, () => {
     new Notice('Exported successfully', 20000);

@@ -29,6 +29,7 @@
 	},
 	"dependencies": {
 		"@marp-team/marp-core": "^3.5.0",
+		"fix-path": "^4.0.0",
 		"markdown-it": "^13.0.1",
 		"markdown-it-front-matter": "^0.2.3",
 		"mime": "^3.0.0",
