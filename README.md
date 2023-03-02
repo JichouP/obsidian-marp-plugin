@@ -26,6 +26,16 @@ When exporting, images are converted to Base64 and embedded in the file, so you 
 The image path can be an absolute or relative path from the root of the vault.  
 The Wikilink format (`![[path/to/image.png]]`) will **NOT** work for slides, **you must use the CommomMark format (`![alt](path/to/image.png)`)**.
 
+## Transition
+
+![transition](docs/transition.gif)
+
+Transitions can be used by exporting in HTML format.
+However, you need to set the `viewTransition API` to `Enable` in Chrome 110.
+(Not required if you are using the beta version (111+) of Chrome.)
+
+![enable_view_transitions_api](docs/enable_view_transitions_api.png)
+
 ## Settings
 
 ### Enable Auto Reload
