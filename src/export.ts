@@ -36,7 +36,13 @@ export async function exportSlide(
     },
   );
 
-  const result = md.render(await readFile(filePath, 'utf-8'));
+  const reg = /!\[[^\]]*\]\(([^)]+)\)/g;
+
+  const fileContent = await readFile(filePath, 'utf-8');
+
+  console.log([...fileContent.matchAll(reg)].map(v => v[1]));
+
+  const result = md.render(fileContent);
   const embedded = await embedImageToHtml(decode(result));
 
   let reverseConverted = (
