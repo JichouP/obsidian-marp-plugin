@@ -24,15 +24,18 @@ export async function exportSlide(
 
   let fileContent = await readFile(filePath, 'utf-8');
 
-  const srcBList = await Promise.all(
+  const srcBase64TupleList = await Promise.all(
     [...new Set([...fileContent.matchAll(imgPathReg)].map(v => v[1]))].map(
       async v => [v, await convertToBase64(v)] as const,
     ),
   );
 
-  for (const [src, base64] of srcBList) {
+  for (const [src, base64] of srcBase64TupleList) {
     fileContent = fileContent.replace(
-      new RegExp(`(!\\[[^\\]]*\\])\\(${src}\\)`, 'g'),
+      new RegExp(
+        String.raw`(!\[[^\]]*\])\(${src.replace(/\\/g, '\\\\')}\)`,
+        'g',
+      ),
       `$1(${base64})`,
     );
   }

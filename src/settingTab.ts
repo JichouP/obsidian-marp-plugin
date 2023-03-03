@@ -56,19 +56,5 @@ export class MarpSettingTab extends PluginSettingTab {
             await this.plugin.saveSettings();
           }),
       );
-
-    new Setting(containerEl)
-      .setName('Use Fragmented List')
-      .setDesc(
-        'Enabling fragmented list will cause bullets to appear one by one when output in HTML format.',
-      )
-      .addToggle(toggle =>
-        toggle
-          .setValue(this.plugin.settings.fragmentedList)
-          .onChange(async v => {
-            this.plugin.settings.fragmentedList = v;
-            await this.plugin.saveSettings();
-          }),
-      );
   }
 }
