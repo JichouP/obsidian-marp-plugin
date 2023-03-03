@@ -51,7 +51,7 @@ export async function exportSlide(
 
   await mkdir(exportDir, { recursive: true });
   try {
-    await writeFile(tmpPath, reverseConverted);
+    await writeFile(tmpPath, reverseConverted.replace(/\\_/g, '_'));
   } catch (e) {
     console.error(e);
   }
