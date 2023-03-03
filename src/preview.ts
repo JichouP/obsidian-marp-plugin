@@ -52,35 +52,17 @@ export class PreviewView extends ItemView implements PreviewViewState {
     const themeDir = join(basePath, this.settings.themeDir);
     this.addAction('download', 'Export as PDF', () => {
       if (this.file) {
-        exportSlide(
-          this.file,
-          'pdf',
-          basePath,
-          themeDir,
-          this.settings.fragmentedList,
-        );
+        exportSlide(this.file, 'pdf', basePath, themeDir);
       }
     });
     this.addAction('image', 'Export as PPTX', () => {
       if (this.file) {
-        exportSlide(
-          this.file,
-          'pptx',
-          basePath,
-          themeDir,
-          this.settings.fragmentedList,
-        );
+        exportSlide(this.file, 'pptx', basePath, themeDir);
       }
     });
     this.addAction('code-glyph', 'Export as HTML', () => {
       if (this.file) {
-        exportSlide(
-          this.file,
-          'html',
-          basePath,
-          themeDir,
-          this.settings.fragmentedList,
-        );
+        exportSlide(this.file, 'html', basePath, themeDir);
       }
     });
   }
