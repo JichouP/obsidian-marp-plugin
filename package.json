@@ -30,12 +30,6 @@
 	"dependencies": {
 		"@marp-team/marp-core": "^3.5.0",
 		"fix-path": "^4.0.0",
-		"markdown-it": "^13.0.1",
-		"markdown-it-front-matter": "^0.2.3",
-		"mime": "^3.0.0",
-		"rehype-parse": "^8.0.4",
-		"rehype-remark": "^9.1.2",
-		"remark-stringify": "^10.0.2",
-		"unified": "^10.1.2"
+		"mime": "^3.0.0"
 	}
 }
