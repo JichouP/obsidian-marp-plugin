@@ -4,6 +4,7 @@ import { Notice, TFile } from 'obsidian';
 import { convertToBase64 } from './convertImage';
 import { join, normalize } from 'path';
 import fixPath from 'fix-path';
+import { getEngine } from './engine';
 
 const imgPathReg = /!\[[^\]]*\]\(([^)]+)\)/g;
 
@@ -21,6 +22,7 @@ export async function exportSlide(
   if (!file) return;
   const filePath = normalize(join(basePath, file.path));
   const tmpPath = join(exportDir, `${file.basename}.tmp`);
+  const tmpEnginePath = join(exportDir, 'engine.js');
 
   let fileContent = await readFile(filePath, 'utf-8');
 
@@ -43,6 +45,7 @@ export async function exportSlide(
   await mkdir(exportDir, { recursive: true });
   try {
     await writeFile(tmpPath, fileContent);
+    await writeFile(tmpEnginePath, getEngine());
   } catch (e) {
     console.error(e);
   }
@@ -53,12 +56,12 @@ export async function exportSlide(
     cmd = `npx -y @marp-team/marp-cli@latest --bespoke.transition --stdin false --allow-local-files --theme-set "${themeDir}" -o "${join(
       exportDir,
       file.basename,
-    )}.${ext}" -- "${tmpPath}"`;
+    )}.${ext}" --engine ${tmpEnginePath} -- "${tmpPath}"`;
   } catch (e) {
     cmd = `npx -y @marp-team/marp-cli@latest --stdin false --allow-local-files --bespoke.transition -o "${join(
       exportDir,
       file.basename,
-    )}.${ext}" -- "${tmpPath}"`;
+    )}.${ext}" --engine ${tmpEnginePath} -- "${tmpPath}"`;
   }
 
   fixPath();
@@ -66,5 +69,6 @@ export async function exportSlide(
   exec(cmd, () => {
     new Notice('Exported successfully', 20000);
     rm(tmpPath);
+    rm(tmpEnginePath);
   });
 }
