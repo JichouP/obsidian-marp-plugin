@@ -34,9 +34,27 @@ export class PreviewView extends ItemView implements PreviewViewState {
     return 'Marp Preview';
   }
 
+
+  // Function to replace Wikilinks with the desired format
+  replaceImageWikilinks(markdown: string): string {
+    const wikilinkRegex = /!\[\[([^\]]+)\]\]/g;
+    const lines = markdown.split("\n");
+    const replacedLines = lines.map((line) => {
+      const replacedLine = line.replace(wikilinkRegex, (match, name) => {
+        // Modify the format of the Wikilink as needed
+        const url = this.app.vault.adapter.getResourcePath(name);
+        return `![${name}](${url})`;
+      });
+      return replacedLine;
+    });
+    return replacedLines.join("\n");
+  }
+  
+
   async renderPreview() {
     if (!this.file) return;
-    const content = await this.app.vault.cachedRead(this.file);
+    const originContent = await this.app.vault.cachedRead(this.file);
+    const content = this.replaceImageWikilinks(originContent);
     const { html, css } = marp.render(content);
     const doc = await convertHtml(html);
     const container = this.containerEl.children[1];
