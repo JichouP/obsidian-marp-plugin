@@ -1,7 +1,7 @@
 {
 	"id": "marp",
 	"name": "Marp",
-	"version": "1.4.1",
+	"version": "1.5.0",
 	"minAppVersion": "1.0.0",
 	"description": "Plugin for using Marp on Obsidian.",
 	"author": "JichouP",

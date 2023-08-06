@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-marp-plugin",
-	"version": "1.4.1",
+	"version": "1.5.0",
 	"description": "Plugin for using Marp on Obsidian",
 	"main": "main.js",
 	"scripts": {
