@@ -24,7 +24,7 @@ You can choose your preferred format from PDF, PPTX and HTML.
 
 When exporting, images are converted to Base64 and embedded in the file, so you can share slides with embedded local images.  
 The image path can be an absolute or relative path from the root of the vault.  
-The Wikilink format (`![[path/to/image.png]]`) will **NOT** work for slides, **you must use the CommomMark format (`![alt](path/to/image.png)`)**.
+You can use both Wikilink format (`![[path/to/image.png]]`) and CommomMark format (`![alt](path/to/image.png)`).
 
 ## Transition
 
