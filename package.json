@@ -18,7 +18,7 @@
 		"@types/markdown-it": "^13.0.0",
 		"@types/mime": "^3.0.1",
 		"@types/node": "^20.4.5",
-		"@typescript-eslint/eslint-plugin": "6.2.1",
+		"@typescript-eslint/eslint-plugin": "6.3.0",
 		"@typescript-eslint/parser": "6.3.0",
 		"builtin-modules": "3.3.0",
 		"esbuild": "0.18.17",
