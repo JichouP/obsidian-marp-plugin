@@ -28,7 +28,7 @@
 		"typescript": "5.1.6"
 	},
 	"dependencies": {
-		"@marp-team/marp-core": "^3.7.0",
+		"@marp-team/marp-core": "^3.8.0",
 		"fix-path": "^4.0.0",
 		"mime": "^3.0.0"
 	}
