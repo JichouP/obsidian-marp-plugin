@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-marp-plugin",
-	"version": "1.4.1",
+	"version": "1.5.0",
 	"description": "Plugin for using Marp on Obsidian",
 	"main": "main.js",
 	"scripts": {
@@ -15,20 +15,20 @@
 	"author": "JichouP",
 	"license": "MIT",
 	"devDependencies": {
-		"@types/markdown-it": "^12.2.3",
+		"@types/markdown-it": "^13.0.0",
 		"@types/mime": "^3.0.1",
-		"@types/node": "^20.4.5",
-		"@typescript-eslint/eslint-plugin": "6.2.1",
-		"@typescript-eslint/parser": "6.2.1",
+		"@types/node": "^20.5.0",
+		"@typescript-eslint/eslint-plugin": "6.4.0",
+		"@typescript-eslint/parser": "6.4.0",
 		"builtin-modules": "3.3.0",
-		"esbuild": "0.18.17",
+		"esbuild": "0.19.2",
 		"obsidian": "latest",
-		"prettier": "^3.0.0",
+		"prettier": "^3.0.1",
 		"tslib": "2.6.1",
 		"typescript": "5.1.6"
 	},
 	"dependencies": {
-		"@marp-team/marp-core": "^3.7.0",
+		"@marp-team/marp-core": "^3.8.0",
 		"fix-path": "^4.0.0",
 		"mime": "^3.0.0"
 	}
