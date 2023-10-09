@@ -17,7 +17,7 @@
 	"devDependencies": {
 		"@types/markdown-it": "^13.0.2",
 		"@types/mime": "^3.0.2",
-		"@types/node": "^20.7.0",
+		"@types/node": "^20.8.4",
 		"@typescript-eslint/eslint-plugin": "6.7.4",
 		"@typescript-eslint/parser": "6.7.5",
 		"builtin-modules": "3.3.0",
