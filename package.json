@@ -16,7 +16,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/markdown-it": "^13.0.2",
-		"@types/mime": "^3.0.2",
+		"@types/mime": "^3.0.3",
 		"@types/node": "^20.8.6",
 		"@typescript-eslint/eslint-plugin": "6.8.0",
 		"@typescript-eslint/parser": "6.8.0",
