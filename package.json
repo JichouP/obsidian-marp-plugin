@@ -15,7 +15,7 @@
 	"author": "JichouP",
 	"license": "MIT",
 	"devDependencies": {
-		"@types/markdown-it": "^13.0.6",
+		"@types/markdown-it": "^13.0.7",
 		"@types/mime": "^3.0.4",
 		"@types/node": "^20.10.0",
 		"@typescript-eslint/eslint-plugin": "6.12.0",
