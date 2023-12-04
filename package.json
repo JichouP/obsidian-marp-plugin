@@ -30,6 +30,6 @@
 	"dependencies": {
 		"@marp-team/marp-core": "^3.9.0",
 		"fix-path": "^4.0.0",
-		"mime": "^3.0.0"
+		"mime": "^4.0.0"
 	}
 }
