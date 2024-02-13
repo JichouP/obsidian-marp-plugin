@@ -15,21 +15,21 @@
 	"author": "JichouP",
 	"license": "MIT",
 	"devDependencies": {
-		"@types/markdown-it": "^13.0.0",
-		"@types/mime": "^3.0.1",
-		"@types/node": "^20.5.0",
-		"@typescript-eslint/eslint-plugin": "6.4.0",
-		"@typescript-eslint/parser": "6.4.0",
+		"@types/markdown-it": "^13.0.7",
+		"@types/mime": "^3.0.4",
+		"@types/node": "^20.10.7",
+		"@typescript-eslint/eslint-plugin": "6.18.0",
+		"@typescript-eslint/parser": "6.18.1",
 		"builtin-modules": "3.3.0",
-		"esbuild": "0.19.2",
+		"esbuild": "0.19.11",
 		"obsidian": "latest",
-		"prettier": "^3.0.1",
-		"tslib": "2.6.1",
-		"typescript": "5.1.6"
+		"prettier": "^3.1.1",
+		"tslib": "2.6.2",
+		"typescript": "5.3.3"
 	},
 	"dependencies": {
-		"@marp-team/marp-core": "^3.8.0",
+		"@marp-team/marp-core": "^3.9.0",
 		"fix-path": "^4.0.0",
-		"mime": "^3.0.0"
+		"mime": "^4.0.1"
 	}
 }
