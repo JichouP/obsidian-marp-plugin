@@ -40,30 +40,24 @@ export class PreviewView extends ItemView implements PreviewViewState {
     const wikilinkRegex = /!\[\[(.+?)\]\]/g;
     const replacedMarkdown = markdown.replace(wikilinkRegex, (_, name) => {
       // Get url for image
-      // const url = this.app.vault.adapter.getResourcePath(name);
-      const file_list = this.app.vault.getFiles();
-
-      let url = "";
+      const url = name;
       let width = -1;
 
-      // judge if the name ends with a number, if so, it is a zoomed image
+      // Judge if the name ends with a number, if so, it is a zoomed image
+      // Because if a wikilink is a common image, it will ends with image format, like ".png"
+      // Only zoomed image will ends with a number
       if (name.match(/.*\d$/)) {
         // zoomed image wikilink format: ![[xxx|xxxxx]], parse by "|"
         const name_list = name.split("|");
         name = name_list[0];
         width = parseInt(name_list[1]);
-      }
-
-      for (let i = 0; i < file_list.length; i++) {
-        if (file_list[i].name == name) {
-          url = file_list[i].path;
-          break;
-        }
-      }
-
-      if (width != -1) {
         return `![width:${width}](<${url}>)`;
       } else {
+        // Parse the image name
+        // Common wiki link format: ![[path/xxxx.png]]
+        // Only extract the image name `xxxx`
+        const name_list = name.split("/");
+        name = name_list[name_list.length - 1].split(".")[0];
         return `![${name}](<${url}>)`;
       }
     });
