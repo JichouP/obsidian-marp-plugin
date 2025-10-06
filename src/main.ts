@@ -1,4 +1,4 @@
-import { FileSystemAdapter, Notice, Plugin, TFile } from 'obsidian';
+import { FileSystemAdapter, Notice, Plugin, TFile, App } from 'obsidian';
 import { MARP_DEFAULT_SETTINGS, MarpPluginSettings } from './settings';
 import { MARP_PREVIEW_VIEW_TYPE, PreviewView } from './preview';
 import { MarpSettingTab } from './settingTab';

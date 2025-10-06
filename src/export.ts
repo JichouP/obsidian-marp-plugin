@@ -1,6 +1,6 @@
 import { exec } from 'child_process';
 import { access, mkdir, readFile, rm, writeFile } from 'fs/promises';
-import { Notice, TFile } from 'obsidian';
+import { Notice, TFile, App } from 'obsidian';
 import { convertToBase64 } from './convertImage';
 import { join, normalize } from 'path';
 import fixPath from 'fix-path';
@@ -13,12 +13,16 @@ export async function exportSlide(
   ext: 'html' | 'pdf' | 'pptx',
   basePath: string,
   themeDir: string,
+  app: App,
+  customExportDir?: string, // Add this parameter
 ) {
-  const exportDir = join(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    process.env[process.platform == 'win32' ? 'USERPROFILE' : 'HOME']!,
-    'Downloads',
-  );
+  // Use custom export directory relative to vault if provided, otherwise use Downloads
+  const exportDir = customExportDir && customExportDir.trim() !== '' 
+    ? normalize(join(basePath, customExportDir)) // Make it relative to vault
+    : join(
+        process.env[process.platform == 'win32' ? 'USERPROFILE' : 'HOME']!,
+        'Downloads',
+      );
   if (!file) return;
   const filePath = normalize(join(basePath, file.path));
   const tmpPath = join(exportDir, `${file.basename}.tmp`);
@@ -28,8 +32,8 @@ export async function exportSlide(
 
   const srcBase64TupleList = await Promise.all(
     [...new Set([...fileContent.matchAll(imgPathReg)].map(v => v[1]))].map(
-      async v => [v, await convertToBase64(v)] as const,
-    ),
+      async v => [v, await convertToBase64(v, app)] as const,
+      ),
   );
 
   for (const [src, base64] of srcBase64TupleList) {
