@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting } from 'obsidian';
+import { App, PluginSettingTab, Setting} from 'obsidian';
 import MarpPlugin from './main';
 
 export class MarpSettingTab extends PluginSettingTab {
@@ -53,6 +53,20 @@ export class MarpSettingTab extends PluginSettingTab {
           .setValue(this.plugin.settings.themeDir)
           .onChange(async v => {
             this.plugin.settings.themeDir = v;
+            await this.plugin.saveSettings();
+          }),
+    );
+    new Setting(containerEl)
+      .setName('Export Directory')
+      .setDesc(
+        'Specify the directory where exported files will be saved, relative to your vault folder. For example: "exports" will create a folder called "exports" in your vault root. Leave empty to use the default $HOME/Downloads folder.',
+  )
+      .addText(text =>
+        text
+          .setPlaceholder('Leave empty for Downloads folder')
+          .setValue(this.plugin.settings.exportDir)
+          .onChange(async v => {
+            this.plugin.settings.exportDir = v;
             await this.plugin.saveSettings();
           }),
       );

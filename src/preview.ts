@@ -4,6 +4,7 @@ import {
   TFile,
   ViewStateResult,
   WorkspaceLeaf,
+  App
 } from 'obsidian';
 import { convertHtml } from './convertImage';
 import { exportSlide } from './export';
@@ -13,11 +14,11 @@ import { join } from 'path';
 
 export const MARP_PREVIEW_VIEW_TYPE = 'marp-preview-view';
 
-interface PreviewViewState {
+interface PreviewViewState extends Record<string, unknown> {
   file: TFile | null;
 }
 
-export class PreviewView extends ItemView implements PreviewViewState {
+export class PreviewView extends ItemView {
   file: TFile | null;
   settings: MarpPluginSettings;
   constructor(leaf: WorkspaceLeaf, settings: MarpPluginSettings) {
@@ -52,7 +53,7 @@ export class PreviewView extends ItemView implements PreviewViewState {
     const originContent = await this.app.vault.cachedRead(this.file);
     const content = this.replaceImageWikilinks(originContent);
     const { html, css } = marp.render(content);
-    const doc = await convertHtml(html);
+    const doc = await convertHtml(html, this.app); // Pass this.app
     const container = this.containerEl.children[1];
     container.empty();
     container.appendChild(doc.body.children[0]);
@@ -64,19 +65,21 @@ export class PreviewView extends ItemView implements PreviewViewState {
       this.app.vault.adapter as FileSystemAdapter
     ).getBasePath();
     const themeDir = join(basePath, this.settings.themeDir);
+    const customExportDir = this.settings.exportDir; // Add this line
+    
     this.addAction('download', 'Export as PDF', () => {
       if (this.file) {
-        exportSlide(this.file, 'pdf', basePath, themeDir);
+        exportSlide(this.file, 'pdf', basePath, themeDir, this.app, customExportDir);
       }
     });
     this.addAction('image', 'Export as PPTX', () => {
       if (this.file) {
-        exportSlide(this.file, 'pptx', basePath, themeDir);
+        exportSlide(this.file, 'pptx', basePath, themeDir, this.app, customExportDir);
       }
     });
     this.addAction('code-glyph', 'Export as HTML', () => {
       if (this.file) {
-        exportSlide(this.file, 'html', basePath, themeDir);
+        exportSlide(this.file, 'html', basePath, themeDir, this.app, customExportDir);
       }
     });
   }
